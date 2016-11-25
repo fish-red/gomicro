@@ -13,9 +13,9 @@ import (
 func Logging(ctx context.Context, request interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (response interface{}, err error) {
 	start := time.Now()
 
-	log.CtxInfo(ctx, "calling %s, request=%s", info.FullMethod, marshal(request))
+	log.CtxInfof(ctx, "calling %s, request=%s", info.FullMethod, marshal(request))
 	response, err = handler(ctx, request)
-	log.CtxInfo(ctx, "finished %s, cost=%v, response=%v, err=%v", info.FullMethod, time.Since(start), response, err)
+	log.CtxInfof(ctx, "finished %s, cost=%v, response=%v, err=%v", info.FullMethod, time.Since(start), response, err)
 
 	return response, err
 }
