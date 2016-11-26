@@ -16,7 +16,7 @@ import (
 
 var (
 	service = flag.String("service", "hello_service", "service name")
-	port    = flag.Int("port", 1701, "listening port")
+	port    = flag.Int("port", 1702, "listening port")
 	addr    = flag.String("addr", "http://127.0.0.1:2379", "register address")
 )
 
@@ -29,7 +29,7 @@ func main() {
 	}
 
 	// register a service to etcd
-	err = naming.Register(*service, "127.0.0.1", *port, *addr, time.Second*3, 5)
+	err = naming.Register(*service, "10.10.0.10", *port, *addr, time.Second*3, 5)
 	if err != nil {
 		panic(err)
 	}
