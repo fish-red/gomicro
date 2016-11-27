@@ -53,6 +53,11 @@ var levels = []string{
 	"[FATA]",
 }
 
+var (
+	// BasePath 项目目录的基础目录
+	BasePath = os.Getenv("GOPATH") + "/src/"
+)
+
 // A Logger represents an active logging object that generates lines of
 // output to an io.Writer.  Each logging operation makes a single call to
 // the Writer's Write method.  A Logger can be used simultaneously from
@@ -106,10 +111,7 @@ func itoa(buf *bytes.Buffer, i int, wid int) {
 func moduleOf(file string) string {
 	pos := strings.LastIndex(file, "/")
 	if pos != -1 {
-		pos1 := strings.LastIndex(file[:pos], "/src/github.com/gomicro/")
-		if pos1 != -1 {
-			return file[pos1+24 : pos]
-		}
+		return file[len(BasePath):pos]
 	}
 	return "UNKNOWN"
 }

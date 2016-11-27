@@ -6,21 +6,22 @@ import (
 
 	"os"
 
+	"github.com/pborman/uuid"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/metadata"
 )
 
 // 生成日志跟踪的唯一标识
 func getTracerIDFromCtx(ctx context.Context) string {
-	guid := "00000000-0000-0000-0000-000000000000"
+	guid := uuid.New()
 
 	if ctx == nil {
 		return guid
 	}
 
 	if meta, ok := metadata.FromContext(ctx); ok {
-		if meta["tid"] != nil && len(meta["tid"]) > 0 {
-			return meta["tid"][0]
+		if meta["guid"] != nil && len(meta["guid"]) > 0 {
+			return meta["guid"][0]
 		}
 	}
 	return guid

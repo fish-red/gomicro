@@ -5,6 +5,7 @@ import (
 
 	"gomicro/rpc/examples/pb"
 
+	"github.com/pborman/uuid"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -19,14 +20,14 @@ func main() {
 	client := pb.NewHelloServiceClient(conn)
 
 	{
-		ctx := metadata.NewContext(context.Background(), metadata.Pairs("tid", "normal-hello-request"))
+		ctx := metadata.NewContext(context.Background(), metadata.Pairs("guid", uuid.New()))
 		response, err := client.NormalHello(ctx, &pb.HelloRequest{Greeting: "world"})
 		fmt.Printf("normal hello: reponse=%#v, error=%v\n", response, err)
 	}
 
-	{
-		ctx := metadata.NewContext(context.Background(), metadata.Pairs("tid", "normal-panic-request"))
-		response, err := client.PanicHello(ctx, &pb.HelloRequest{Greeting: "world"})
-		fmt.Printf("panic hello: response=%#v, error=%v\n", response, err)
-	}
+	// {
+	// 	ctx := metadata.NewContext(context.Background(), metadata.Pairs("tid", "normal-panic-request"))
+	// 	response, err := client.PanicHello(ctx, &pb.HelloRequest{Greeting: "world"})
+	// 	fmt.Printf("panic hello: response=%#v, error=%v\n", response, err)
+	// }
 }
