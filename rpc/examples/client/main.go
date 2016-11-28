@@ -5,6 +5,7 @@ import (
 
 	"gomicro/rpc/examples/pb"
 
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/pborman/uuid"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -12,7 +13,12 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial("127.0.0.1:1701", grpc.WithInsecure())
+	// conn, err := grpc.Dial("127.0.0.1:1701", grpc.WithInsecure())
+	conn, err := grpc.Dial(
+		"127.0.0.1:1701", grpc.WithInsecure(),
+		grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor),
+		grpc.WithStreamInterceptor(grpc_prometheus.StreamClientInterceptor),
+	)
 	if err != nil {
 		panic(err)
 	}

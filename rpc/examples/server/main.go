@@ -4,11 +4,14 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"net/http"
 
 	"gomicro/log"
 	"gomicro/rpc"
 	"gomicro/rpc/examples/pb"
 
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -29,6 +32,8 @@ func main() {
 	log.CtxPrintf(nil, "starting hello service at %d", *port)
 	s := rpc.NewServer()
 	pb.RegisterHelloServiceServer(s, &HelloServer{})
+	grpc_prometheus.Register(s)
+	http.Handle("/metrics", prometheus.Handler())
 	s.Serve(listener)
 }
 
@@ -46,9 +51,6 @@ func (HelloServer) NormalHello(ctx context.Context, r *pb.HelloRequest) (*pb.Hel
 func (HelloServer) PanicHello(ctx context.Context, r *pb.HelloRequest) (*pb.HelloResponse, error) {
 	log.CtxInfof(ctx, "panic hello")
 	panic(fmt.Errorf("nothing"))
-
-	reply := "Hello, " + r.Greeting
-	return &pb.HelloResponse{Reply: reply}, nil
 }
 
 // ErrorHello 实现服务
